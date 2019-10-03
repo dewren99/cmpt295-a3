@@ -5,40 +5,40 @@ dot_prod:
 	pushq   %rbp
 	movq    %rsp, %rbp # prologue
 
-	movq    %rdi, -24(%rbp) # rdi - A
-	movq    %rsi, -32(%rbp) # rsi - B
-	movl    %edx, -36(%rbp) # edx - n
-	movl    %ecx, -40(%rbp) # ecx - i
-	movl    %r8d, -44(%rbp) # r8d - j
 	movl    $0, -4(%rbp) # temp return value C_ij
 	movl    $0, -8(%rbp) # loop iterator k
+	movq    %rdi, -16(%rbp) # rdi - A
+	movq    %rsi, -24(%rbp) # rsi - B
+	movl    %edx, -32(%rbp) # edx - n
+	movl    %ecx, -36(%rbp) # ecx - i
+	movl    %r8d, -40(%rbp) # r8d - j
 	jmp     endl
 	
 loop:
 	
-	movl    -40(%rbp), %eax # eax = i
+	movl    -36(%rbp), %eax # eax = i
 	leal    0(,%rax,4), %edx # k = i*4
 	movl    -8(%rbp), %eax
 	addl    %edx, %eax # k = k+i*4
 	movl   	%eax, %edx # edx = k
-	movq    -24(%rbp), %rax # rax = A
+	movq    -16(%rbp), %rax # rax = A
 	addq    %rdx, %rax # A += (k+i*4)
 	mov  	(%rax), %eax
 	mov		%eax, %edx
-	movl    -44(%rbp), %eax # eax = j
+	movl    -40(%rbp), %eax # eax = j
 	movl  	%eax, %ecx
-	movq    -32(%rbp), %rax # rax = B
+	movq    -24(%rbp), %rax # rax = B
 	addq    %rcx, %rax # B += j
 	mov	    (%rax), %eax
 	# movsbl  %al, %eax
 	imull   %edx, %eax # A[k+i*4] * B[j] =  A_ik * B_jk
 	addl    %eax, -4(%rbp) # temp return value += A_ik * B_jk
-	addl    $4, -44(%rbp) # adding +4 to jump to next row on B
+	addl    $4, -40(%rbp) # adding +4 to jump to next row on B
 	addl    $1, -8(%rbp) # k++
 
 endl:
 	movl    -8(%rbp), %eax
-	cmpl    -36(%rbp), %eax
+	cmpl    -32(%rbp), %eax
 	jl      loop
 	movb   -4(%rbp), %al # put temp return value C_ij inside eax
 	

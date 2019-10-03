@@ -34,10 +34,15 @@ char B[N][N] = { 2, -1,  2, -2,
 
 char C[N][N];
 char res[N][N];
-char rand1[N][N];
+char res1[N][N];
+char res2[N][N];
+char D[N][N];
 void print_matrix(void *A, int n);
 
-
+char D[N][N] = { 1, 1,  1, 1,
+                 1, 1, 1,  1,
+                1, 1,  1,  1,
+                1,  1, 1, 1};
 
 // char* randmatrix(char *A[], int n)
 // {
@@ -55,9 +60,17 @@ void main () {
         for (j = 0; j < N; j++) {
             C[i][j] = dot_prod(A, B, N, i, j);
             res[i][j] =dot_prod_(A, B, N, i, j);
+
+            res1[i][j] = dot_prod(A, D, N, i, j);
+            res2[i][j] = dot_prod_(A, D, N, i, j);
+
             if(C[i][j] != res[i][j])
             {
-                printf("Not equal at i=%d, j=%d",i,j);
+                printf("Not equal at i=%d, j=%d\n",i,j);
+            }
+            if(res1[i][j] != res2[i][j])
+            {
+                printf("Not equal at i=%d, j=%d\n",i,j);
             }
         }
     }
@@ -66,9 +79,12 @@ void main () {
 
     print_matrix(A, N);
     print_matrix(B, N);
+
     print_matrix(C, N);
     print_matrix(res, N);
 
+    print_matrix(res1, N);
+    print_matrix(res2, N);
 
     return;
 }
